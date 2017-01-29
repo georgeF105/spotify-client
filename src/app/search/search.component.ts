@@ -10,19 +10,19 @@ import { Observable } from 'rxjs/Observable';
 })
 export class SearchComponent implements OnInit {
   public resultsObservable: Observable<any>;
+  public tracksObservable: Observable<any>;
 
   constructor(
     private spotifyService: SpotifyService
   ) { }
 
-  ngOnInit() {
-    this.searchFor('seal');
-    this.resultsObservable.share().subscribe(results => {
-      console.log(results);
-    });
-  }
+  ngOnInit() { }
 
   public searchFor(search: string): any {
     this.resultsObservable = this.spotifyService.searchFor(search);
+    this.tracksObservable = this.spotifyService.searchFor(search)
+      .map(results => {
+        return results.tracks.items;
+      });
   }
 }
