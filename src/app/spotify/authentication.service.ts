@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
+import * as queryString from 'querystring';
 import 'rxjs/Rx';
 
 const client_id = 'cbe9c021a3f14f53acf2f7727d7591ec';
@@ -23,8 +24,11 @@ export class AuthenticationService {
     }
     return this.route.fragment
     .map((fragment: string) => {
-      console.log('fragment', fragment);
-      return fragment;
+      const token = queryString.parse(fragment).access_token;
+      if (token) {
+        this.authToken = token;
+      }
+      return token;
     });
   };
 
