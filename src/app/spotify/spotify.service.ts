@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Http } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import 'rxjs/Rx';
 
 import { AuthenticationService } from './authentication.service';
@@ -16,12 +16,18 @@ export class SpotifyService {
   ) { }
 
   public searchFor(search: string): Observable<any> {
-    this.authenticationService.getAuthToken().subscribe(thing => {
-      console.log('thing', thing);
-    });
-    return this.http.get(spotifyUrl + `/v1/search?type=artist,track,playlist,album&q=${search}`)
-    .map(result => {
-      return result.json();
+    return this.authenticationService.getAuthToken()
+    .switchMap(token => {
+      const headers = new Headers({
+        'Authorization': `Bearer ${token}`
+      });
+      const options = new RequestOptions({
+        headers: headers
+      });
+      return this.http.get(spotifyUrl + `/v1/search?type=artist,track,playlist,album&q=${search}`, options);
+    })
+    .map(thing => {
+      return thing.json();
     });
   }
 }
