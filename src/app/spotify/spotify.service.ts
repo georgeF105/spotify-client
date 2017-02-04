@@ -18,16 +18,20 @@ export class SpotifyService {
   public searchFor(search: string): Observable<any> {
     return this.authenticationService.getAuthToken()
     .switchMap(token => {
-      const headers = new Headers({
-        'Authorization': `Bearer ${token}`
-      });
-      const options = new RequestOptions({
-        headers: headers
-      });
+      const options = this.getOptions(token);
       return this.http.get(spotifyUrl + `/v1/search?type=artist,track,playlist,album&q=${search}`, options);
     })
     .map(thing => {
       return thing.json();
     });
+  }
+
+  private getOptions(token: string): any {
+    const headers = new Headers({
+        'Authorization': `Bearer ${token}`
+      });
+      return new RequestOptions({
+        headers: headers
+      });
   }
 }

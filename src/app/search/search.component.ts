@@ -26,6 +26,10 @@ export class SearchComponent implements OnInit {
     this.tracksObservable = this.resultsObservable
       .map(results => {
         return results.tracks.items;
+      })
+      .catch(err => {
+        console.log('error', err);
+        return [];
       });
     this.artistsObservable = this.resultsObservable
       .map(results => {

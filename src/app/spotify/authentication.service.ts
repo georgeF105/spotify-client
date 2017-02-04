@@ -5,11 +5,12 @@ import { Observable } from 'rxjs/Observable';
 import * as queryString from 'querystring';
 import 'rxjs/Rx';
 
-const client_id = 'cbe9c021a3f14f53acf2f7727d7591ec';
+const clientId = 'cbe9c021a3f14f53acf2f7727d7591ec';
 const redirectUri = 'http://localhost:4200/callback';
 @Injectable()
 export class AuthenticationService {
   private authToken: string;
+  private tokenExpiresAt: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -18,22 +19,36 @@ export class AuthenticationService {
 
   public getAuthToken(): Observable<any> {
     if (this.authToken) {
-      return Observable.create((observer) => {
-        observer.onNext(this.authToken);
-      });
+      Observable.from([this.authToken]).first().share();
     }
     return this.route.fragment
     .map((fragment: string) => {
-      const token = queryString.parse(fragment).access_token;
-      if (token) {
-        this.authToken = token;
+      const response = queryString.parse(fragment);
+      if (response) {
+        this.tokenExpiresAt = response.expires_in + Date.now();
+        this.authToken = response.access_token;
+      }
+      return this.authToken;
+    })
+    .map(token => {
+      if (this.tokenExpiresAt < Date.now()) {
+        throw new Error('token_timed_out');
       }
       return token;
-    });
+    })
+    .first()
+    .share();
   };
 
   public getAuthUrl(): string {
     const parsedRedirectUri = encodeURIComponent(redirectUri);
-    return `https://accounts.spotify.com/authorize?client_id=${client_id}&redirect_uri=${parsedRedirectUri}&response_type=token&show_dialog=false`;
+    const options = {
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      response_type: 'token',
+      show_dialog: false
+    };
+    const parsedOptions = queryString.stringify(options);
+    return `https://accounts.spotify.com/authorize?${parsedOptions}`;
   }
 }
