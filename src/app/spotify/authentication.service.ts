@@ -17,9 +17,20 @@ export class AuthenticationService {
     private location: Location
   ) { }
 
+  public extractAuthToken(): Observable<void> {
+    return this.route.fragment.first().map(fragment => {
+      const response = queryString.parse(fragment);
+      if (response) {
+        this.tokenExpiresAt = response.expires_in + Date.now();
+        this.authToken = response.access_token;
+      }
+      return;
+    });
+  }
+
   public getAuthToken(): Observable<any> {
     if (this.authToken) {
-      Observable.from([this.authToken]).first().share();
+      return Observable.from([this.authToken]).first().share();
     }
     return this.route.fragment
     .map((fragment: string) => {
