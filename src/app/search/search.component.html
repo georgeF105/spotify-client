@@ -1,0 +1,12 @@
+<md-card
+  *ngFor="let track of tracksObservable | async"
+  class="track-card">
+  <md-card-header>
+    <md-card-title>
+      Track: {{track.name}}
+    </md-card-title>
+    <md-card-subtitle>
+      By: {{track.artists[0].name}}
+    </md-card-subtitle>
+  </md-card-header>
+</md-card>
