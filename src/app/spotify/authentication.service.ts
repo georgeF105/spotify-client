@@ -22,7 +22,7 @@ export class AuthenticationService {
     return this.route.fragment.first().map(fragment => {
       const response = queryString.parse(fragment);
       if (response) {
-        this.tokenExpiresAt = response.expires_in + Date.now();
+        this.tokenExpiresAt = parseInt(response.expires_in, 0) + Date.now();
         this.authToken = response.access_token;
       }
       return;
@@ -32,24 +32,9 @@ export class AuthenticationService {
   public getAuthToken(): Observable<any> {
     if (this.authToken) {
       return Observable.from([this.authToken]).first().share();
+    } else {
+      this.fetchAuthToken();
     }
-    return this.route.fragment
-    .map((fragment: string) => {
-      const response = queryString.parse(fragment);
-      if (response) {
-        this.tokenExpiresAt = response.expires_in + Date.now();
-        this.authToken = response.access_token;
-      }
-      return this.authToken;
-    })
-    .map(token => {
-      if (this.tokenExpiresAt < Date.now()) {
-        throw new Error('token_timed_out');
-      }
-      return token;
-    })
-    .first()
-    .share();
   };
 
   public hasValidAuthToken(): boolean {
