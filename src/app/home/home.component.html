@@ -7,9 +7,9 @@
   <md-input-container>
     <input md-input #searchInput placeholder="Search" type="search" (keyup.enter)="search.searchFor(searchInput.value)">
   </md-input-container>
-  <a href="{{authUrl()}}">
+  <button md-button (click)="getSpotifyAuth()">
     <md-icon>home</md-icon>    
-  </a>
+  </button>
 </md-toolbar>
 <div class="app-content">
   <app-search

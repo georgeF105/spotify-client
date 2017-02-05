@@ -23,15 +23,17 @@ export class HomeComponent implements OnInit {
           this.redirectToHome();
         });
       }
+    if (!this.authenticationService.hasValidAuthToken()) {
+      this.authenticationService.fetchAuthToken();
+    }
     });
   }
 
-  public authUrl(): string {
-    return this.authenticationService.getAuthUrl();
+  public getSpotifyAuth(): void {
+    this.authenticationService.fetchAuthToken();
   }
 
   private redirectToHome(): void {
-    console.log('redirectToHome');
     this.router.navigate(['']);
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 import * as queryString from 'querystring';
@@ -14,6 +14,7 @@ export class AuthenticationService {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private location: Location
   ) { }
 
@@ -51,7 +52,18 @@ export class AuthenticationService {
     .share();
   };
 
-  public getAuthUrl(): string {
+  public hasValidAuthToken(): boolean {
+    return this.authToken && this.tokenExpiresAt > Date.now();
+  }
+
+  public fetchAuthToken(): void {
+    const url = this.getAuthUrl();
+
+    // TODO: ugly! find a better way.
+    window.location.href = url;
+  }
+
+  private getAuthUrl(): string {
     const parsedRedirectUri = encodeURIComponent(redirectUri);
     const options = {
       client_id: clientId,
