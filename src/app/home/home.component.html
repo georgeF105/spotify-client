@@ -16,7 +16,15 @@
   </button>
 </md-toolbar>
 <div class="app-content">
-  <app-search
-    #search></app-search>
-  <app-playlists></app-playlists>
+  <md-tab-group>
+    <md-tab
+      label="Playlists">
+      <app-playlists></app-playlists>  
+      </md-tab>
+      <md-tab
+        label="Search">
+        <app-search
+          #search></app-search>
+      </md-tab>
+  </md-tab-group>
 </div>
