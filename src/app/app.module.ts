@@ -10,12 +10,14 @@ import { SpotifyService } from './spotify/spotify.service';
 import { AuthenticationService } from './spotify/authentication.service';
 import { SearchComponent } from './search/search.component';
 import { HomeComponent } from './home/home.component';
+import { PlaylistsComponent } from './playlists/playlists.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SearchComponent,
-    HomeComponent
+    HomeComponent,
+    PlaylistsComponent
   ],
   imports: [
     BrowserModule,
