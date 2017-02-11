@@ -18,13 +18,17 @@
 <div class="app-content">
   <md-tab-group>
     <md-tab
+      label="Now Playing">
+      <app-now-playing></app-now-playing>
+    </md-tab>
+    <md-tab
       label="Playlists">
       <app-playlists></app-playlists>  
-      </md-tab>
-      <md-tab
-        label="Search">
-        <app-search
-          #search></app-search>
-      </md-tab>
+    </md-tab>
+    <md-tab
+      label="Search">
+      <app-search
+        #search></app-search>
+    </md-tab>
   </md-tab-group>
 </div>

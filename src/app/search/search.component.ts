@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { SpotifyService } from '../spotify/spotify.service';
 import { Observable } from 'rxjs/Observable';
 
+import { PlayerService } from '../spotify/player.service';
+import { ITrack } from '../interfaces/ITrack';
 
 @Component({
   selector: 'app-search',
@@ -16,7 +18,8 @@ export class SearchComponent implements OnInit {
   public playlistObservable: Observable<any>;
 
   constructor(
-    private spotifyService: SpotifyService
+    private spotifyService: SpotifyService,
+    private playerService: PlayerService
   ) { }
 
   ngOnInit() { }
@@ -44,5 +47,9 @@ export class SearchComponent implements OnInit {
       .map(results => {
         return results.playlists.items;
       });
+  }
+
+  public addTrackToUpNext(track: ITrack): void {
+    this.playerService.addTrackToUpNext(track);
   }
 }
