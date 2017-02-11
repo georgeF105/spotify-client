@@ -12,29 +12,40 @@ export class AuthenticationService {
   private authToken: string;
   private tokenExpiresAt: number;
 
+  private extractAuthTokenObservable: Observable<void>;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private location: Location
-  ) { }
+  ) {
+    this.extractAuthTokenObservable = this.extractAuthToken();
+  }
 
   public extractAuthToken(): Observable<void> {
-    return this.route.fragment.first().map(fragment => {
+    this.extractAuthTokenObservable = this.route.fragment.first().map(fragment => {
       const response = queryString.parse(fragment);
       if (response) {
         this.tokenExpiresAt = parseInt(response.expires_in, 0) + Date.now();
         this.authToken = response.access_token;
       }
       return;
-    });
+    })
+    .do(() => {
+      this.redirectToHome();
+    })
+    .share();
+    return this.extractAuthTokenObservable;
   }
 
   public getAuthToken(): Observable<any> {
     if (this.authToken) {
-      return Observable.from([this.authToken]).first().share();
-    } else {
-      this.fetchAuthToken();
+      return Observable.from([this.authToken]);
     }
+    return this.extractAuthTokenObservable
+    .map(() => {
+      return this.authToken;
+    }).first();
   };
 
   public hasValidAuthToken(): boolean {
@@ -58,5 +69,9 @@ export class AuthenticationService {
     };
     const parsedOptions = queryString.stringify(options);
     return `https://accounts.spotify.com/authorize?${parsedOptions}`;
+  }
+
+  private redirectToHome(): void {
+    this.router.navigate(['']);
   }
 }
