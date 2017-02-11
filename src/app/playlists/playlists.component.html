@@ -1,0 +1,9 @@
+<md-card
+  *ngFor="let playlist of playlistsObservable | async"
+  class="playlist-card">
+  <md-card-header>
+    <md-card-title>
+      playlist: {{playlist.name}}
+    </md-card-title>
+  </md-card-header>
+</md-card>

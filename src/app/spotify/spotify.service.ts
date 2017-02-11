@@ -29,6 +29,16 @@ export class SpotifyService {
     });
   }
 
+  public getPlaylists(): Observable<any> {
+    return this.getOptions()
+    .switchMap(options => {
+      return this.http.get(spotifyUrl + '/v1/me/playlists', options);
+    })
+    .map(response => {
+      return response.json();
+    });
+  }
+
   public getUser(): Observable<IUser> {
     return this.getOptions()
     .switchMap(options => {
