@@ -8,16 +8,19 @@ import { AppComponent } from './app.component';
 import { appRouter } from './app.router';
 import { SpotifyService } from './spotify/spotify.service';
 import { AuthenticationService } from './spotify/authentication.service';
+import { PlayerService } from './spotify/player.service';
 import { SearchComponent } from './search/search.component';
 import { HomeComponent } from './home/home.component';
 import { PlaylistsComponent } from './playlists/playlists.component';
+import { NowPlayingComponent } from './now-playing/now-playing.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SearchComponent,
     HomeComponent,
-    PlaylistsComponent
+    PlaylistsComponent,
+    NowPlayingComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +31,8 @@ import { PlaylistsComponent } from './playlists/playlists.component';
   ],
   providers: [
     SpotifyService,
-    AuthenticationService
+    AuthenticationService,
+    PlayerService
   ],
   bootstrap: [AppComponent]
 })

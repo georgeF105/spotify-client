@@ -1,7 +1,7 @@
 <md-card
-  *ngFor="let track of tracksObservable | async"
+  *ngFor="let track of upNextObservable | async"
   class="track-card"
-  (click)="addTrackToUpNext(track)">
+  (click)="removeTrackFromUpNext(track)">
   <md-card-header>
     <md-card-title>
       Track: {{track.name}}
