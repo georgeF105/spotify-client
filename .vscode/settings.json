@@ -3,5 +3,6 @@
     "editor.tabSize": 2,
     "tslint.enable": true,
     "tslint.run": "onType",
-    "tslint.autoFixOnSave": true
-}
+    "tslint.autoFixOnSave": true,
+    "vsicons.presets.angular": true
+  }
